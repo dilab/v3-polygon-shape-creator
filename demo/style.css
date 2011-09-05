@@ -1,0 +1,74 @@
+html,body{
+	margin:0;
+	padding:0;
+	width:100%;
+	height:100%;
+	font-family:Arial, Helvetica, sans-serif;
+}
+
+form.pay{
+	width:200px;
+	display:inline;
+}
+div#header{	
+	vertical-align:middle;
+	border-bottom:1px solid #000;
+}
+div#main-map{
+	width:70%;
+	height:70%;
+	float:left;
+}
+div#side{
+	width:30%;
+	float:left;
+}
+
+div#dataPanel{
+	width:90%;
+	height:50%;
+	overflow:auto;
+	border:2px solid #DDDDDD;
+}
+div#side input{
+	width:90%;
+}
+
+div#side input.navi{
+	font-size:18px;
+	height:30px;
+	margin-bottom:10px;
+}
+div ul{
+	margin-top:30px;
+	margin-bottom:30px;
+}
+div ul li{
+	display: inline;
+	list-style-type: none;
+	padding-right: 40px;
+	font-size:18px;
+	font-weight:bold;
+}
+
+div ul li.title{
+	font-size:22px;
+	color:#888;
+}
+
+div#header p{
+	color:#888;
+	font-size:14px;
+	padding-left:20px;
+}
+span.instruction{
+	font-weight:bold;
+	
+}
+
+.message-box { text-align: center; padding: 5px; color:#545454; width:80%;  margin:5px auto; font-size:12px;}
+.clean { background-color: #efefef; border-top: 2px solid #dedede; border-bottom: 2px solid #dedede; }
+.info  { background-color: #f7fafd; border-top: 2px solid #b5d3ff; border-bottom: 2px solid #b5d3ff; }
+.ok    { background-color: #d7f7c4; border-top: 2px solid #82cb2f; border-bottom: 2px solid #82cb2f; }
+.alert { background-color: #fef5be; border-top: 2px solid #fdd425; border-bottom: 2px solid #fdd425; }
+.error { background-color: #ffcdd1; border-top: 2px solid #e10c0c; border-bottom: 2px solid #e10c0c; }
