@@ -12,6 +12,17 @@
 		 this.event=google.maps.event.addListener(thisOjb.map, 'click', function(event) { 
 					thisOjb.pen.draw(event.latLng);
 		 });
+
+		 this.insertPolygon = function (Coords) {
+	        creator = this;
+	        creator.pen.listOfDots = new Array();
+	        Coords.forEach(function (value, index) {
+	            creator.pen.draw(value);
+	            creator.pen.listOfDots.push(new Dot(value, creator.map, creator.pen));
+	        });
+	        creator.pen.drawPloygon(creator.pen.listOfDots);
+	        creator.pen.deleteMis();
+    	 }
 		 
 		 this.showData = function(){
 		 	return this.pen.getData();
@@ -24,8 +35,10 @@
 		 //destroy the pen
 		 this.destroy = function(){
 		 	this.pen.deleteMis();
-			if(null!=this.pen.polygon){
-				this.pen.polygon.remove();
+			if(null!=this.pen.polygons){
+				for (var i = 0; i < this.pen.polygons.length; i++) {
+                	this.pen.polygons[i].remove();
+            	}
 			}
 			google.maps.event.removeListener(this.event);
 		 }
@@ -38,32 +51,31 @@
 	 	this.listOfDots = new Array();
 		this.polyline =null;
 		this.polygon = null;
+		this.polygons = [];
 		this.currentDot = null;
 		//draw function
 		this.draw = function(latLng){
-			if (null != this.polygon) {
-				alert('Click Reset to draw another');
+			if (this.currentDot != null && this.listOfDots.length > 1 && this.currentDot == this.listOfDots[0]) {
+				this.drawPloygon(this.listOfDots);
 			}else {
-				if (this.currentDot != null && this.listOfDots.length > 1 && this.currentDot == this.listOfDots[0]) {
-					this.drawPloygon(this.listOfDots);
-				}else {
-					//remove previous line
-					if(null!=this.polyline){
-						this.polyline.remove();
-					}
-					//draw Dot
-					var dot = new Dot(latLng, this.map, this);
-					this.listOfDots.push(dot);
-					//draw line
-					if(this.listOfDots.length > 1){
-						this.polyline = new Line(this.listOfDots, this.map);
-					}
+				//remove previous line
+				if(null!=this.polyline){
+					this.polyline.remove();
+				}
+				//draw Dot
+				var dot = new Dot(latLng, this.map, this);
+				this.listOfDots.push(dot);
+				//draw line
+				if(this.listOfDots.length > 1){
+					this.polyline = new Line(this.listOfDots, this.map);
 				}
 			}
 		}
+		
 		//draw ploygon
 		this.drawPloygon = function (listOfDots,color,des,id){
 			this.polygon = new Polygon(listOfDots,this.map,this,color,des,id);
+			this.polygons.push(this.polygon);
 			this.deleteMis();
 		}
 		//delete all dots and polylines
@@ -97,14 +109,21 @@
 		}
 		//get plots data
 		this.getData = function(){
-			if(this.polygon!=null){
-				var data ="";
-				var paths = this.polygon.getPlots();
-				//get paths
-				paths.getAt(0).forEach(function(value, index){
-					data+=(value.toString());
-				});
-				return data;
+			if(this.polygons!=null){
+				var polygons_data = [];
+				for (var i = 0; i < this.polygons.length; i++) {
+					var data ="";
+					var paths = this.polygons[i].getPlots();
+					//get paths
+					paths.getAt(0).forEach(function(value, index){
+						if (data.indexOf(value) != -1) {
+							return;
+						}
+						data+=(value.toString());
+					});
+					polygons_data.push(data);
+				}
+				return polygons_data.join("|");
 			}else {
 				return null;
 			}
